@@ -42,6 +42,10 @@ class ViewController: UIViewController {
         
         scoreLabel.text = "0 / 10"
         
+        // refresh the scoreLabel
+        scoreLabel.transform = .identity
+        scoreLabel.backgroundColor = .clear
+        
         game.refresh()
     }
     
@@ -96,6 +100,8 @@ class ViewController: UIViewController {
         
         scoreLabel.text = "\(game.score) / 10"
         
+        showScoreView()
+        
         let screenWidth = UIScreen.main.bounds.width
         var translationTransform: CGAffineTransform
         if questionView.style == .correct {
@@ -124,11 +130,79 @@ class ViewController: UIViewController {
             questionView.title = game.currentQuestion.title
         case .over:
             questionView.title = "Game Over"
+            showGameOverQuestionView()
         }
         
         UIView.animate(withDuration: 0.5, delay: 0.0, usingSpringWithDamping: 0.5, initialSpringVelocity: 0.5, options: [], animations: {
             self.questionView.transform = .identity
         }, completion: nil)
     }
+    
+    
+    // #### BONUS ####
+    
+    // change the size of the score if the player wins or loses
+    private func changeSizeScoreView() {
+        var scoreTransform: CGAffineTransform
+        if questionView.style == .correct {
+            scoreTransform = CGAffineTransform(scaleX: 1.2, y: 1.2)
+        } else {
+            scoreTransform = CGAffineTransform(scaleX: 0.8, y: 0.8)
+        }
+        
+        UIView.animate(withDuration: 0.5, delay: 0.2, usingSpringWithDamping: 0.8, initialSpringVelocity: 0.8, options: [], animations: {
+            self.scoreLabel.transform = scoreTransform
+        }, completion: nil)
+    }
+    
+    // change of background color of the score view if the player wins or loses
+    private func changeBackgroundColorScoreView() {
+        var scoreBackgroundColor: UIColor
+        if questionView.style == .correct {
+            scoreBackgroundColor = #colorLiteral(red: 0, green: 0.5628422499, blue: 0.3188166618, alpha: 0.5)
+        } else {
+            scoreBackgroundColor = #colorLiteral(red: 1, green: 0.1491314173, blue: 0, alpha: 0.5048694349)
+        }
+        
+        UIView.animate(withDuration: 0.7, delay: 0.0, usingSpringWithDamping: 0.2, initialSpringVelocity: 0.2, options: [], animations: {
+            self.scoreLabel.backgroundColor = scoreBackgroundColor
+        }, completion: nil)
+    }
+    
+    // change of opacity of the score
+    private func changeOpacityScoreView() {
+        UIView.animate(withDuration: 0.6, delay: 0.1, usingSpringWithDamping: 0.5, initialSpringVelocity: 0.4, options: [], animations: {
+            self.scoreLabel.alpha = CGFloat(0.3)
+        }) { (success) in
+            if success {
+                self.scoreLabel.alpha = CGFloat(1.0)
+            }
+        }
+    }
+    
+    // animates the score by changing the background color, the size and the opacity of score text
+    private func showScoreView() {
+        changeSizeScoreView()
+        changeBackgroundColorScoreView()
+        changeOpacityScoreView()
+    }
+    
+    // change background color of the "Game Over" view based of the score
+    private func showGameOverQuestionView() {
+        var gameOverBackgroundColorView: UIColor
+        if game.score > 5 {
+            gameOverBackgroundColorView = #colorLiteral(red: 0.5818830132, green: 0.2156915367, blue: 1, alpha: 0.7974101027)
+        } else if game.score == 5 {
+            gameOverBackgroundColorView = #colorLiteral(red: 0, green: 0.5898008943, blue: 1, alpha: 0.7975438784)
+        } else {
+            gameOverBackgroundColorView = #colorLiteral(red: 1, green: 0.4932718873, blue: 0.4739984274, alpha: 0.9012735445)
+        }
+        
+        UIView.animate(withDuration: 0.7, delay: 0.0, usingSpringWithDamping: 0.5, initialSpringVelocity: 0.8, options: [], animations: {
+            self.questionView.backgroundColor = gameOverBackgroundColorView
+        }, completion: nil)
+    }
+
+
 }
 
