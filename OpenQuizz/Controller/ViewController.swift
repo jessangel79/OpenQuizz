@@ -171,8 +171,8 @@ class ViewController: UIViewController {
     
     // change of opacity of the score
     private func changeOpacityScoreView() {
-        UIView.animate(withDuration: 0.6, delay: 0.1, usingSpringWithDamping: 0.5, initialSpringVelocity: 0.4, options: [], animations: {
-            self.scoreLabel.alpha = CGFloat(0.3)
+        UIView.animate(withDuration: 0.5, delay: 0.1, usingSpringWithDamping: 0.5, initialSpringVelocity: 0.4, options: [], animations: {
+            self.scoreLabel.alpha = CGFloat(0.1)
         }) { (success) in
             if success {
                 self.scoreLabel.alpha = CGFloat(1.0)
